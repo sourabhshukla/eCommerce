@@ -92,7 +92,7 @@ class LoginActivity : AppCompatActivity() {
                             if(userData?.password.equals(password)){
                                 Toast.makeText(context,"Admin Login Successful",Toast.LENGTH_SHORT).show()
                                 loadingProgressDialog.dismiss()
-                                startActivity(Intent(context,AdminAddNewProductActivity::class.java))
+                                startActivity(Intent(context,AdminCategoryActivity::class.java))
                             }
                             else{Toast.makeText(context,"Incorrect Password",Toast.LENGTH_SHORT).show()}
                         }

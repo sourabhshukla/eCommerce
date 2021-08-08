@@ -7,11 +7,14 @@ import com.test.ecommerce.databinding.ActivityAdminAddNewProductBinding
 
 class AdminAddNewProductActivity : AppCompatActivity() {
     lateinit var binding: ActivityAdminAddNewProductBinding
+    lateinit var categoryName: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityAdminAddNewProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Toast.makeText(this,"Welcome Admin...",Toast.LENGTH_SHORT).show()
+        categoryName= intent.getStringExtra("category").toString()
+
+        Toast.makeText(this,categoryName,Toast.LENGTH_SHORT).show()
     }
 }

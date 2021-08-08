@@ -70,7 +70,10 @@ class MainActivity : AppCompatActivity() {
                         loadingProgressDialog.dismiss()
                         startActivity(Intent(context,HomeActivity::class.java))
                     }
-                    else{Toast.makeText(context,"Incorrect Credentials",Toast.LENGTH_SHORT).show()}
+                    else{
+                        Toast.makeText(context,"Incorrect Credentials",Toast.LENGTH_SHORT).show()
+                        loadingProgressDialog.dismiss()
+                    }
                 }
             }
 
