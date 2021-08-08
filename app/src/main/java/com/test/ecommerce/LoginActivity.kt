@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
     lateinit var loadingProgressDialog: ProgressDialog
     private lateinit var context: Context
+    var parentDirectory: String="Users"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,20 @@ class LoginActivity : AppCompatActivity() {
         Paper.init(this)
 
         binding.loginBtn.setOnClickListener{ LoginUser() }
+
+        binding.adminPanelLink.setOnClickListener {
+            binding.loginBtn.text = "Admin Login"
+            binding.notAdminPanelLink.visibility= View.VISIBLE
+            binding.adminPanelLink.visibility=View.INVISIBLE
+            parentDirectory="Admins"
+        }
+
+        binding.notAdminPanelLink.setOnClickListener {
+            binding.loginBtn.text = "Login"
+            binding.notAdminPanelLink.visibility= View.INVISIBLE
+            binding.adminPanelLink.visibility=View.VISIBLE
+            parentDirectory="Users"
+        }
 
     }
 
@@ -68,22 +84,43 @@ class LoginActivity : AppCompatActivity() {
 
         database.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.child("Users").child(phoneNumber).exists()){
-                    val userData=snapshot.child("Users").child(phoneNumber).getValue(Users::class.java)
+                if (parentDirectory.equals("Admins")){
+                    if (snapshot.child(parentDirectory).child(phoneNumber).exists()){
+                        val userData=snapshot.child(parentDirectory).child(phoneNumber).getValue(Users::class.java)
 
-                    if(userData?.phone.equals(phoneNumber)){
-                        if(userData?.password.equals(password)){
-                            Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
-                            loadingProgressDialog.dismiss()
-                            startActivity(Intent(context,HomeActivity::class.java))
+                        if(userData?.phone.equals(phoneNumber)){
+                            if(userData?.password.equals(password)){
+                                Toast.makeText(context,"Admin Login Successful",Toast.LENGTH_SHORT).show()
+                                loadingProgressDialog.dismiss()
+                                startActivity(Intent(context,AdminAddNewProductActivity::class.java))
+                            }
+                            else{Toast.makeText(context,"Incorrect Password",Toast.LENGTH_SHORT).show()}
                         }
-                        else{Toast.makeText(context,"Incorrect Password",Toast.LENGTH_SHORT).show()}
+                        else{Toast.makeText(context,"Incorrect Phone Number",Toast.LENGTH_SHORT).show()}
                     }
-                    else{Toast.makeText(context,"Incorrect Phone Number",Toast.LENGTH_SHORT).show()}
+                    else{
+                        Toast.makeText(context,"Account with this Phone Number does not exits",Toast.LENGTH_SHORT).show()
+                        loadingProgressDialog.dismiss()
+                    }
                 }
-                else{
-                    Toast.makeText(context,"Account with this Phone Number does not exits",Toast.LENGTH_SHORT).show()
-                    loadingProgressDialog.dismiss()
+                else if (parentDirectory.equals("Users")){
+                    if (snapshot.child(parentDirectory).child(phoneNumber).exists()){
+                        val userData=snapshot.child(parentDirectory).child(phoneNumber).getValue(Users::class.java)
+
+                        if(userData?.phone.equals(phoneNumber)){
+                            if(userData?.password.equals(password)){
+                                Toast.makeText(context,"User Login Successful",Toast.LENGTH_SHORT).show()
+                                loadingProgressDialog.dismiss()
+                                startActivity(Intent(context,HomeActivity::class.java))
+                            }
+                            else{Toast.makeText(context,"Incorrect Password",Toast.LENGTH_SHORT).show()}
+                        }
+                        else{Toast.makeText(context,"Incorrect Phone Number",Toast.LENGTH_SHORT).show()}
+                    }
+                    else{
+                        Toast.makeText(context,"Account with this Phone Number does not exits",Toast.LENGTH_SHORT).show()
+                        loadingProgressDialog.dismiss()
+                    }
                 }
             }
 
