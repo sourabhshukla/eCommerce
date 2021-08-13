@@ -17,6 +17,7 @@ import com.test.ecommerce.databinding.ActivityLoginBinding
 import com.test.ecommerce.model.Users
 import com.test.ecommerce.prevalent.UserPasswordKey
 import com.test.ecommerce.prevalent.UserPhoneKey
+import com.test.ecommerce.prevalent.currentOnlineUser
 import io.paperdb.Paper
 
 class LoginActivity : AppCompatActivity() {
@@ -31,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
         loadingProgressDialog= ProgressDialog(this)
         context=this
+
 
         Paper.init(this)
 
@@ -94,9 +96,15 @@ class LoginActivity : AppCompatActivity() {
                                 loadingProgressDialog.dismiss()
                                 startActivity(Intent(context,AdminCategoryActivity::class.java))
                             }
-                            else{Toast.makeText(context,"Incorrect Password",Toast.LENGTH_SHORT).show()}
+                            else{
+                                Toast.makeText(context,"Incorrect Password",Toast.LENGTH_SHORT).show()
+                                loadingProgressDialog.dismiss()
+                            }
                         }
-                        else{Toast.makeText(context,"Incorrect Phone Number",Toast.LENGTH_SHORT).show()}
+                        else{
+                            Toast.makeText(context,"Incorrect Phone Number",Toast.LENGTH_SHORT).show()
+                            loadingProgressDialog.dismiss()
+                        }
                     }
                     else{
                         Toast.makeText(context,"Account with this Phone Number does not exits",Toast.LENGTH_SHORT).show()
@@ -111,6 +119,7 @@ class LoginActivity : AppCompatActivity() {
                             if(userData?.password.equals(password)){
                                 Toast.makeText(context,"User Login Successful",Toast.LENGTH_SHORT).show()
                                 loadingProgressDialog.dismiss()
+                                currentOnlineUser=userData
                                 startActivity(Intent(context,HomeActivity::class.java))
                             }
                             else{Toast.makeText(context,"Incorrect Password",Toast.LENGTH_SHORT).show()}
