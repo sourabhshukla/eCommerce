@@ -18,6 +18,7 @@ import com.test.ecommerce.databinding.ActivityMainBinding
 import com.test.ecommerce.model.Users
 import com.test.ecommerce.prevalent.UserPasswordKey
 import com.test.ecommerce.prevalent.UserPhoneKey
+import com.test.ecommerce.prevalent.currentOnlineUser
 import io.paperdb.Paper
 
 class MainActivity : AppCompatActivity() {
@@ -70,6 +71,7 @@ class MainActivity : AppCompatActivity() {
                     if (userData?.phone.equals(userPhone) && userData?.password.equals(userPassword)){
                         Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
                         loadingProgressDialog.dismiss()
+                        currentOnlineUser=userData
                         startActivity(Intent(context,HomeActivity::class.java))
                     }
                     else{

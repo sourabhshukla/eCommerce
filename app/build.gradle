@@ -58,4 +58,12 @@ dependencies {
     implementation 'io.github.pilgr:paperdb:2.7.1'
     //For Circular ImageView
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+
+    implementation 'com.firebaseui:firebase-ui-database:8.0.0'
+    //Picasso Library
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    //ArthurHub Library for image cropping
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    //Elegent Number Button
+    //implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
 }

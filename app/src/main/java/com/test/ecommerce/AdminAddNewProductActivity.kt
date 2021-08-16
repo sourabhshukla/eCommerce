@@ -57,9 +57,9 @@ class AdminAddNewProductActivity : AppCompatActivity() {
     }
 
     private fun validateProductData() {
-        description=binding.productDescription.toString()
-        price=binding.productPrice.toString()
-        pname=binding.productName.toString()
+        description=binding.productDescription.text.toString()
+        price=binding.productPrice.text.toString()
+        pname=binding.productName.text.toString()
 
         if (imageUri==null){Toast.makeText(this,"Product Image Is Mandatory...",Toast.LENGTH_SHORT).show()}
         else if (TextUtils.isEmpty(description)){Toast.makeText(this,"Description Is Mandatory...",Toast.LENGTH_SHORT).show()}
