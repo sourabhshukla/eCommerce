@@ -58,9 +58,8 @@ class HomeActivity : AppCompatActivity() {
         binding.appBarHome.toolbar.title = "Home"
         setSupportActionBar(binding.appBarHome.toolbar)
 
-        binding.appBarHome.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        binding.appBarHome.fab.setOnClickListener {
+            startActivity(Intent(this,CartActivity::class.java))
         }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -126,6 +125,9 @@ class HomeActivity : AppCompatActivity() {
         }
         else if (item.itemId==R.id.nav_settings){
             startActivity(Intent(this,SettingsActivity::class.java))
+        }
+        else if(item.itemId==R.id.nav_cart){
+            startActivity(Intent(this,CartActivity::class.java))
         }
         return false
     }

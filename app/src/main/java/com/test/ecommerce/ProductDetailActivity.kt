@@ -4,6 +4,7 @@ import android.content.Intent
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -19,6 +20,7 @@ import java.text.SimpleDateFormat
 class ProductDetailActivity : AppCompatActivity() {
     private lateinit var binding:ActivityProductDetailBinding
     private lateinit var productId:String
+    private var state:String="Normal"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityProductDetailBinding.inflate(layoutInflater)
@@ -50,8 +52,18 @@ class ProductDetailActivity : AppCompatActivity() {
         }
 
         binding.productAddToCart.setOnClickListener {
-            addingToCartList()
+            if (state=="Order Placed" || state=="Order Shipped"){
+                Toast.makeText(this,"Your can purchase more products once your order is shipped or confirmed",Toast.LENGTH_SHORT).show()
+            }
+            else{
+                addingToCartList()
+            }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkOrderState()
     }
 
     private fun addingToCartList() {
@@ -83,7 +95,7 @@ class ProductDetailActivity : AppCompatActivity() {
                         .child("Produts").child(productId)
                         .updateChildren(cartMap)
                         .addOnCompleteListener {
-                            Toast.makeText(this,"Added To Cart Successfully...",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this,"Added To Cart Successfully...",Toast.LENGTH_LONG).show()
                             startActivity(Intent(this,HomeActivity::class.java))
                         }
                 }
@@ -100,6 +112,29 @@ class ProductDetailActivity : AppCompatActivity() {
                     binding.productPriceDetails.text=products?.price
                     binding.productDescriptionDetails.text=products?.description
                     Picasso.get().load(products!!.image).placeholder(R.drawable.profile).into(binding.productImageDetails)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    private fun checkOrderState(){
+        val ordersRef=Firebase.database.reference.child("Orders").child(currentOnlineUser!!.phone!!)
+
+        ordersRef.addValueEventListener(object :ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()){
+                    val shippingState=snapshot.child("state").value.toString()
+
+                    if (shippingState=="shipped"){
+                        state="Order Shipped"
+                    }
+                    else if (shippingState=="not shipped"){
+                        state="Order Placed"
+                    }
                 }
             }
 
