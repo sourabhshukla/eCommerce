@@ -92,7 +92,7 @@ class ProductDetailActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 if (it.isSuccessful){
                     cartListRef.child("Admin View").child(currentOnlineUser!!.phone!!)
-                        .child("Produts").child(productId)
+                        .child("Products").child(productId)
                         .updateChildren(cartMap)
                         .addOnCompleteListener {
                             Toast.makeText(this,"Added To Cart Successfully...",Toast.LENGTH_LONG).show()

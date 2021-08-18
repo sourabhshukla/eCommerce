@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AdminNewOrdersActivity">
+    tools:context=".AdminUserProductsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/r3"
@@ -15,11 +15,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="New Orders"
+            android:text="Products"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="25dp"
@@ -29,7 +29,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/orders_list"
+        android:id="@+id/products_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="1dp"
