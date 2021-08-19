@@ -1,7 +1,6 @@
 package com.test.ecommerce
 
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +12,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.test.ecommerce.admin.AdminCategoryActivity
 import com.test.ecommerce.databinding.ActivityLoginBinding
 import com.test.ecommerce.model.Users
 import com.test.ecommerce.prevalent.UserPasswordKey
@@ -23,7 +23,6 @@ import io.paperdb.Paper
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
     lateinit var loadingProgressDialog: ProgressDialog
-    private lateinit var context: Context
     var parentDirectory: String="Users"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +30,6 @@ class LoginActivity : AppCompatActivity() {
         binding= ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loadingProgressDialog= ProgressDialog(this)
-        context=this
-
 
         Paper.init(this)
 
@@ -92,22 +89,23 @@ class LoginActivity : AppCompatActivity() {
 
                         if(userData?.phone.equals(phoneNumber)){
                             if(userData?.password.equals(password)){
-                                Toast.makeText(context,"Admin Login Successful",Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext,"Admin Login Successful",Toast.LENGTH_SHORT).show()
                                 loadingProgressDialog.dismiss()
-                                startActivity(Intent(context,AdminCategoryActivity::class.java))
+                                currentOnlineUser=userData
+                                startActivity(Intent(applicationContext, AdminCategoryActivity::class.java))
                             }
                             else{
-                                Toast.makeText(context,"Incorrect Password",Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext,"Incorrect Password",Toast.LENGTH_SHORT).show()
                                 loadingProgressDialog.dismiss()
                             }
                         }
                         else{
-                            Toast.makeText(context,"Incorrect Phone Number",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(applicationContext,"Incorrect Phone Number",Toast.LENGTH_SHORT).show()
                             loadingProgressDialog.dismiss()
                         }
                     }
                     else{
-                        Toast.makeText(context,"Account with this Phone Number does not exits",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext,"Account with this Phone Number does not exits",Toast.LENGTH_SHORT).show()
                         loadingProgressDialog.dismiss()
                     }
                 }
@@ -117,17 +115,17 @@ class LoginActivity : AppCompatActivity() {
 
                         if(userData?.phone.equals(phoneNumber)){
                             if(userData?.password.equals(password)){
-                                Toast.makeText(context,"User Login Successful",Toast.LENGTH_SHORT).show()
+                                Toast.makeText(applicationContext,"User Login Successful",Toast.LENGTH_SHORT).show()
                                 loadingProgressDialog.dismiss()
                                 currentOnlineUser=userData
-                                startActivity(Intent(context,HomeActivity::class.java))
+                                startActivity(Intent(applicationContext,HomeActivity::class.java))
                             }
-                            else{Toast.makeText(context,"Incorrect Password",Toast.LENGTH_SHORT).show()}
+                            else{Toast.makeText(applicationContext,"Incorrect Password",Toast.LENGTH_SHORT).show()}
                         }
-                        else{Toast.makeText(context,"Incorrect Phone Number",Toast.LENGTH_SHORT).show()}
+                        else{Toast.makeText(applicationContext,"Incorrect Phone Number",Toast.LENGTH_SHORT).show()}
                     }
                     else{
-                        Toast.makeText(context,"Account with this Phone Number does not exits",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext,"Account with this Phone Number does not exits",Toast.LENGTH_SHORT).show()
                         loadingProgressDialog.dismiss()
                     }
                 }

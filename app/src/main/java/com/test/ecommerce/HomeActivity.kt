@@ -1,6 +1,5 @@
 package com.test.ecommerce
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.TextView
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,8 +15,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -28,6 +24,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
+import com.test.ecommerce.admin.AdminMaintainProductsActivity
 import com.test.ecommerce.databinding.ActivityHomeBinding
 import com.test.ecommerce.databinding.ProductItemLayoutBinding
 import com.test.ecommerce.model.Products
@@ -42,13 +39,15 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
     private lateinit var productRef:DatabaseReference
     private lateinit var recyclerView: RecyclerView
-    private lateinit var context: Context
+    private var type: String?=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context=this
+        type = intent?.let {
+            it.getStringExtra("Admin")
+        }
         productRef=Firebase.database.reference.child("Products")
         recyclerView=findViewById(R.id.recycler_menu)
         recyclerView.setHasFixedSize(true)
@@ -59,6 +58,7 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarHome.toolbar)
 
         binding.appBarHome.fab.setOnClickListener {
+            if (!type.equals("Admin"))
             startActivity(Intent(this,CartActivity::class.java))
         }
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -103,12 +103,18 @@ class HomeActivity : AppCompatActivity() {
                 position: Int,
                 model: Products
             ) {
+                holder.binding
                 holder.binding.productName.text=model.pname
                 holder.binding.productDescription.text=model.description
                 holder.binding.productPrice.text=model.price
                 Picasso.get().load(model.image).into(holder.binding.productImage)
                 holder.itemView.setOnClickListener {
-                    startActivity(Intent(context,ProductDetailActivity::class.java).putExtra("pid",model.pid))
+                    if(type=="Admin"){
+                        startActivity(Intent(applicationContext, AdminMaintainProductsActivity::class.java).putExtra("pid",model.pid))
+                    }
+                    else{
+                        startActivity(Intent(applicationContext,ProductDetailActivity::class.java).putExtra("pid",model.pid))
+                    }
                 }
             }
         }
@@ -124,10 +130,16 @@ class HomeActivity : AppCompatActivity() {
             finish()  //User can't go back when he presses back button
         }
         else if (item.itemId==R.id.nav_settings){
+            if(!type.equals("Admin"))
             startActivity(Intent(this,SettingsActivity::class.java))
         }
         else if(item.itemId==R.id.nav_cart){
+            if(!type.equals("Admin"))
             startActivity(Intent(this,CartActivity::class.java))
+        }
+        else if (item.itemId==R.id.nav_search){
+            if(!type.equals("Admin"))
+            startActivity(Intent(this,SearchProductsActivity::class.java))
         }
         return false
     }

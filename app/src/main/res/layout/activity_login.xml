@@ -47,7 +47,7 @@
         android:textStyle="bold"
         android:hint="Password"
         android:textColorHint="#bcbcbc"
-        android:inputType="textPassword"
+        android:inputType="numberPassword"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

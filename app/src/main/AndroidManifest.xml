@@ -14,10 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ECommerce">
         <activity
-            android:name=".AdminUserProductsActivity"
+            android:name=".ResetPasswordActivity"
             android:exported="true" />
         <activity
-            android:name=".AdminNewOrdersActivity"
+            android:name=".admin.AdminMaintainProductsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SearchProductsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".admin.AdminUserProductsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".admin.AdminNewOrdersActivity"
             android:exported="true" />
         <activity
             android:name=".ConfirmFileOrderActivity"
@@ -37,10 +46,10 @@
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.ECommerce.NoActionBar" />
         <activity
-            android:name=".AdminCategoryActivity"
+            android:name=".admin.AdminCategoryActivity"
             android:exported="true" />
         <activity
-            android:name=".AdminAddNewProductActivity"
+            android:name=".admin.AdminAddNewProductActivity"
             android:exported="true" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />

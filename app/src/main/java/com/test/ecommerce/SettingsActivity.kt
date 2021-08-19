@@ -30,7 +30,6 @@ import org.w3c.dom.Text
 
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding:ActivitySettingsBinding
-    private lateinit var context: Context
     private var imageUri:Uri?=null
     private lateinit var myUrl:String
     private lateinit var storageProfilePictureRef:StorageReference
@@ -49,7 +48,6 @@ class SettingsActivity : AppCompatActivity() {
         binding=ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         storageProfilePictureRef=Firebase.storage.reference.child("Profile Pictures")
-        context=this
 
          profileImageView = binding.settingsProfileImage
          fullNameEditText = binding.settingsFullName
@@ -198,7 +196,7 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context,"ERROR: ${error}",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,"ERROR: ${error}",Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -1,4 +1,4 @@
-package com.test.ecommerce
+package com.test.ecommerce.admin
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +8,6 @@ import android.text.TextUtils
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.widget.ContentLoadingProgressBar
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -125,7 +124,7 @@ class AdminAddNewProductActivity : AppCompatActivity() {
         productRef.child(productRandomKey).updateChildren(productMap)
             .addOnCompleteListener {
                 if (it.isSuccessful){
-                    startActivity(Intent(this,AdminCategoryActivity::class.java))
+                    startActivity(Intent(this, AdminCategoryActivity::class.java))
                     loadingProgressDialog.dismiss()
                     Toast.makeText(this,"Product added successfully",Toast.LENGTH_SHORT).show()
                 }

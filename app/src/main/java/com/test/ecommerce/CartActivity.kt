@@ -25,13 +25,11 @@ import com.test.ecommerce.viewHolder.CartViewHolder
 
 class CartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCartBinding
-    private lateinit var context: Context
     private var totalPrice:Int=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context=this
         binding.cartList.setHasFixedSize(true)
         binding.cartList.layoutManager=LinearLayoutManager(this)
         binding.nextProcessBtn.setOnClickListener {
@@ -65,11 +63,11 @@ class CartActivity : AppCompatActivity() {
 
                 holder.itemView.setOnClickListener {
                     val options= arrayOf<CharSequence>("Edit","Remove")
-                    val builder=AlertDialog.Builder(context)
+                    val builder=AlertDialog.Builder(applicationContext)
                         .setTitle("Cart Options")
                         .setItems(options) { dialog, which ->
                             if (which==0){
-                                startActivity(Intent(context,ProductDetailActivity::class.java).putExtra("pid",model.pid))
+                                startActivity(Intent(applicationContext,ProductDetailActivity::class.java).putExtra("pid",model.pid))
                             }
                             if (which==1){
                                 cartListRef.child("User View").child(currentOnlineUser!!.phone!!).child("Products")
@@ -77,8 +75,8 @@ class CartActivity : AppCompatActivity() {
                                     .removeValue()
                                     .addOnCompleteListener {
                                         if (it.isSuccessful){
-                                            Toast.makeText(context,"Items removed successfully...",Toast.LENGTH_SHORT).show()
-                                            startActivity(Intent(context,HomeActivity::class.java))
+                                            Toast.makeText(applicationContext,"Items removed successfully...",Toast.LENGTH_SHORT).show()
+                                            startActivity(Intent(applicationContext,HomeActivity::class.java))
                                         }
                                     }
                             }
@@ -109,7 +107,7 @@ class CartActivity : AppCompatActivity() {
                         binding.msg.visibility=View.VISIBLE
                         binding.nextProcessBtn.visibility=View.GONE
 
-                        Toast.makeText(context,"You can purchase more products once your first order arrives",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext,"You can purchase more products once your first order arrives",Toast.LENGTH_SHORT).show()
                     }
                     else if (shippingState=="not shipped"){
                         binding.totalPrice.text="Shipping State = Not Shipped"
@@ -117,7 +115,7 @@ class CartActivity : AppCompatActivity() {
                         binding.msg.visibility=View.VISIBLE
                         binding.nextProcessBtn.visibility=View.GONE
 
-                        Toast.makeText(context,"You can purchase more products once your first order arrives",Toast.LENGTH_LONG).show()
+                        Toast.makeText(applicationContext,"You can purchase more products once your first order arrives",Toast.LENGTH_LONG).show()
                     }
                 }
             }

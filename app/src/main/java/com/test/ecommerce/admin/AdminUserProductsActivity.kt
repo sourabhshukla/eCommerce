@@ -1,4 +1,4 @@
-package com.test.ecommerce
+package com.test.ecommerce.admin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -22,14 +22,12 @@ import kotlin.collections.HashMap
 class RegisterActivity : AppCompatActivity() {
     lateinit var binding: ActivityRegisterBinding
     lateinit var loadingProgressBar: ProgressDialog
-    private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loadingProgressBar= ProgressDialog(this)
-        context=this
 
         binding.registerBtn.setOnClickListener { createAccount() }
     }
@@ -75,28 +73,28 @@ class RegisterActivity : AppCompatActivity() {
                         .addOnCompleteListener(object: OnCompleteListener<Void>{
                             override fun onComplete(task: Task<Void>) {
                                 if (task.isSuccessful){
-                                    Toast.makeText(context,"Congratulations Your account has been Created",Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(applicationContext,"Congratulations Your account has been Created",Toast.LENGTH_SHORT).show()
                                     loadingProgressBar.dismiss()
-                                    startActivity(Intent(context,RegisterActivity::class.java))
+                                    startActivity(Intent(applicationContext,RegisterActivity::class.java))
                                 }
                                 else{
                                     loadingProgressBar.dismiss()
-                                    Toast.makeText(context,"Network Error: Please Try Again",Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(applicationContext,"Network Error: Please Try Again",Toast.LENGTH_SHORT).show()
                                 }
                             }
                         })
 
                 }
                 else{
-                    Toast.makeText(context,"This "+phoneNumber+"is already Registered",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"This "+phoneNumber+"is already Registered",Toast.LENGTH_SHORT).show()
                     loadingProgressBar.dismiss()
-                    Toast.makeText(context,"Please Try Using Another Phone",Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(context,MainActivity::class.java))
+                    Toast.makeText(applicationContext,"Please Try Using Another Phone",Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(applicationContext,MainActivity::class.java))
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(context,"DataBase error",Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext,"DataBase error",Toast.LENGTH_SHORT).show()
             }
         })
     }

@@ -1,6 +1,5 @@
-package com.test.ecommerce
+package com.test.ecommerce.admin
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,12 +20,10 @@ import com.test.ecommerce.viewHolder.AdminOrdersViewHolder
 class AdminNewOrdersActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAdminNewOrdersBinding
     private lateinit var ordersRef: DatabaseReference
-    private lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAdminNewOrdersBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context=this
 
         ordersRef=Firebase.database.reference.child("Orders")
         binding.ordersList.layoutManager=LinearLayoutManager(this)
@@ -60,14 +57,14 @@ class AdminNewOrdersActivity : AppCompatActivity() {
                 holder.binding.orderDateTime.text="Order at: ${model.date}, ${model.time}"
                 holder.binding.orderTotalPrice.text="Total Amount: $ ${model.totalPrice}"
                 holder.binding.showAllProductsBtn.setOnClickListener {
-                    startActivity(Intent(context,AdminUserProductsActivity::class.java).putExtra("uid",uID))
+                    startActivity(Intent(applicationContext, AdminUserProductsActivity::class.java).putExtra("uid",uID))
                 }
                 holder.itemView.setOnClickListener {
                     val options= arrayOf<CharSequence>(
                         "Yes",
                         "No"
                     )
-                    val builder=AlertDialog.Builder(context)
+                    val builder=AlertDialog.Builder(applicationContext)
                     builder.apply {
                         setTitle("Have You Shipped This Order!")
                         setItems(options

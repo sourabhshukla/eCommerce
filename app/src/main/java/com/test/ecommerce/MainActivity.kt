@@ -23,15 +23,12 @@ import io.paperdb.Paper
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    lateinit var context: Context
     lateinit var loadingProgressDialog: ProgressDialog
     var check: Boolean=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context=this
-        FirebaseApp.initializeApp(applicationContext)
 
         Paper.init(this)
 
@@ -69,13 +66,13 @@ class MainActivity : AppCompatActivity() {
                 if(snapshot.child("Users").child(userPhone).exists()){
                     val userData=snapshot.child("Users").child(userPhone).getValue(Users::class.java)
                     if (userData?.phone.equals(userPhone) && userData?.password.equals(userPassword)){
-                        Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext,"Login Successful",Toast.LENGTH_SHORT).show()
                         loadingProgressDialog.dismiss()
                         currentOnlineUser=userData
-                        startActivity(Intent(context,HomeActivity::class.java))
+                        startActivity(Intent(applicationContext,HomeActivity::class.java))
                     }
                     else{
-                        Toast.makeText(context,"Incorrect Credentials",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext,"Incorrect Credentials",Toast.LENGTH_SHORT).show()
                         loadingProgressDialog.dismiss()
                     }
                 }
