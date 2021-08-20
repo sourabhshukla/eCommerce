@@ -19,6 +19,8 @@ import com.test.ecommerce.model.Users
 import com.test.ecommerce.prevalent.UserPasswordKey
 import com.test.ecommerce.prevalent.UserPhoneKey
 import com.test.ecommerce.prevalent.currentOnlineUser
+import com.test.ecommerce.sellers.SellerHomeActivity
+import com.test.ecommerce.sellers.SellerRegistrationActivity
 import io.paperdb.Paper
 
 class MainActivity : AppCompatActivity() {
@@ -55,6 +57,19 @@ class MainActivity : AppCompatActivity() {
         binding.mainJoinNowBtn.setOnClickListener {
             val intent=Intent(this,RegisterActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.sellerBegin.setOnClickListener {
+            startActivity(Intent(this,SellerRegistrationActivity::class.java))
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val firebaseUser=Firebase.auth.currentUser
+        firebaseUser?.let {
+            startActivity(Intent(this, SellerHomeActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK+Intent.FLAG_ACTIVITY_CLEAR_TASK))
+            finish()
         }
     }
 
