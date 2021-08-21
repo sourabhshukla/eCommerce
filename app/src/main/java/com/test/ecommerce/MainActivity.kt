@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
         loadingProgressDialog= ProgressDialog(this)
 
         if(userPhone!=null && userPassword!=null){
-            AllowAccess(userPhone,userPassword)
+            AllowAccess(userPhone,userPassword,this)
             loadingProgressDialog.apply {
                 setTitle("Logging In User")
                 setMessage("Fetching User Credentials")
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun AllowAccess(userPhone: String, userPassword: String) {
+    private fun AllowAccess(userPhone: String, userPassword: String,context: Context) {
         val database=Firebase.database.reference
 
         database.addListenerForSingleValueEvent(object : ValueEventListener{
@@ -81,13 +81,13 @@ class MainActivity : AppCompatActivity() {
                 if(snapshot.child("Users").child(userPhone).exists()){
                     val userData=snapshot.child("Users").child(userPhone).getValue(Users::class.java)
                     if (userData?.phone.equals(userPhone) && userData?.password.equals(userPassword)){
-                        Toast.makeText(applicationContext,"Login Successful",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Login Successful",Toast.LENGTH_SHORT).show()
                         loadingProgressDialog.dismiss()
                         currentOnlineUser=userData
-                        startActivity(Intent(applicationContext,HomeActivity::class.java))
+                        startActivity(Intent(context,HomeActivity::class.java))
                     }
                     else{
-                        Toast.makeText(applicationContext,"Incorrect Credentials",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Incorrect Credentials",Toast.LENGTH_SHORT).show()
                         loadingProgressDialog.dismiss()
                     }
                 }

@@ -1,6 +1,5 @@
 package com.test.ecommerce
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -54,7 +53,7 @@ class SearchProductsActivity : AppCompatActivity() {
                 holder.binding.productPrice.text=model.price
                 Picasso.get().load(model.image).into(holder.binding.productImage)
                 holder.itemView.setOnClickListener {
-                    startActivity(Intent(applicationContext,ProductDetailActivity::class.java).putExtra("pid",model.pid))
+                    startActivity(Intent(it.context,ProductDetailActivity::class.java).putExtra("pid",model.pid))
                 }
             }
         }

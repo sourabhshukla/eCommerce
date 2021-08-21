@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".admin.AdminAddNewProductActivity">
+    tools:context=".sellers.SellerAddNewProductActivity">
 
 
 
@@ -22,7 +22,7 @@
 
 
     <EditText
-        android:id="@+id/product_name"
+        android:id="@+id/product_seller_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/select_product_image"
@@ -36,10 +36,10 @@
 
 
     <EditText
-        android:id="@+id/product_description"
+        android:id="@+id/product_seller_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/product_name"
+        android:layout_below="@+id/product_seller_name"
         android:layout_marginLeft="45dp"
         android:layout_marginTop="6dp"
         android:layout_marginRight="45dp"
@@ -50,10 +50,10 @@
 
 
     <EditText
-        android:id="@+id/product_price"
+        android:id="@+id/product_seller_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/product_description"
+        android:layout_below="@+id/product_seller_description"
         android:inputType="textMultiLine"
         android:layout_marginTop="6dp"
         android:padding="20dp"
@@ -68,7 +68,7 @@
         android:id="@+id/add_new_product"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/product_price"
+        android:layout_below="@+id/product_seller_price"
         android:layout_marginLeft="45dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="45dp"

@@ -14,10 +14,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ECommerce">
         <activity
+            android:name=".admin.AdminCheckNewProductsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".AdminHomeActivity"
+            android:exported="true" />
+        <activity
             android:name=".sellers.SellerHomeActivity"
             android:exported="true"
-            android:label="@string/title_activity_seller_home"
-            />
+            android:label="@string/title_activity_seller_home" />
         <activity
             android:name=".sellers.SellerLoginActivity"
             android:exported="true" />
@@ -57,10 +62,10 @@
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.ECommerce.NoActionBar" />
         <activity
-            android:name=".admin.AdminCategoryActivity"
+            android:name=".sellers.SellerProductCategoryActivity"
             android:exported="true" />
         <activity
-            android:name=".admin.AdminAddNewProductActivity"
+            android:name=".sellers.SellerAddNewProductActivity"
             android:exported="true" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />

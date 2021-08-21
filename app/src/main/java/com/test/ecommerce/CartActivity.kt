@@ -40,7 +40,7 @@ class CartActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        checkOrderState()
+        checkOrderState(this)
         val cartListRef=Firebase.database.reference.child("cart list")
 
         val options=FirebaseRecyclerOptions.Builder<Cart>()
@@ -63,20 +63,20 @@ class CartActivity : AppCompatActivity() {
 
                 holder.itemView.setOnClickListener {
                     val options= arrayOf<CharSequence>("Edit","Remove")
-                    val builder=AlertDialog.Builder(applicationContext)
+                    val builder=AlertDialog.Builder(it.context)
                         .setTitle("Cart Options")
                         .setItems(options) { dialog, which ->
                             if (which==0){
-                                startActivity(Intent(applicationContext,ProductDetailActivity::class.java).putExtra("pid",model.pid))
+                                startActivity(Intent(it.context,ProductDetailActivity::class.java).putExtra("pid",model.pid))
                             }
                             if (which==1){
                                 cartListRef.child("User View").child(currentOnlineUser!!.phone!!).child("Products")
                                     .child(model.pid!!)
                                     .removeValue()
-                                    .addOnCompleteListener {
-                                        if (it.isSuccessful){
-                                            Toast.makeText(applicationContext,"Items removed successfully...",Toast.LENGTH_SHORT).show()
-                                            startActivity(Intent(applicationContext,HomeActivity::class.java))
+                                    .addOnCompleteListener {it1 ->
+                                        if (it1.isSuccessful){
+                                            Toast.makeText(it.context,"Items removed successfully...",Toast.LENGTH_SHORT).show()
+                                            startActivity(Intent(it.context,HomeActivity::class.java))
                                         }
                                     }
                             }
@@ -91,7 +91,7 @@ class CartActivity : AppCompatActivity() {
         adapter.startListening()
     }
 
-    private fun checkOrderState(){
+    private fun checkOrderState(context: Context){
         val ordersRef=Firebase.database.reference.child("Orders").child(currentOnlineUser!!.phone!!)
 
         ordersRef.addValueEventListener(object :ValueEventListener{
@@ -107,7 +107,7 @@ class CartActivity : AppCompatActivity() {
                         binding.msg.visibility=View.VISIBLE
                         binding.nextProcessBtn.visibility=View.GONE
 
-                        Toast.makeText(applicationContext,"You can purchase more products once your first order arrives",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"You can purchase more products once your first order arrives",Toast.LENGTH_SHORT).show()
                     }
                     else if (shippingState=="not shipped"){
                         binding.totalPrice.text="Shipping State = Not Shipped"
@@ -115,7 +115,7 @@ class CartActivity : AppCompatActivity() {
                         binding.msg.visibility=View.VISIBLE
                         binding.nextProcessBtn.visibility=View.GONE
 
-                        Toast.makeText(applicationContext,"You can purchase more products once your first order arrives",Toast.LENGTH_LONG).show()
+                        Toast.makeText(context,"You can purchase more products once your first order arrives",Toast.LENGTH_LONG).show()
                     }
                 }
             }

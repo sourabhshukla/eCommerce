@@ -8,5 +8,6 @@ data class Products(
     val category: String?=null,
     val pid: String?=null,
     val date: String?=null,
-    val time: String?=null
+    val time: String?=null,
+    val productState: String?=null
 )

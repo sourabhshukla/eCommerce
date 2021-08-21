@@ -53,12 +53,12 @@ class RegisterActivity : AppCompatActivity() {
                 setCanceledOnTouchOutside(false)
                 show()
 
-                validatePhoneNumber(name, phoneNumber, password)
+                validatePhoneNumber(name, phoneNumber, password,this.context)
             }
         }
     }
 
-    private fun validatePhoneNumber(name: String, phoneNumber: String, password: String) {
+    private fun validatePhoneNumber(name: String, phoneNumber: String, password: String,context: Context) {
         val database=Firebase.database.reference
 
         database.addListenerForSingleValueEvent(object: ValueEventListener{
@@ -70,31 +70,36 @@ class RegisterActivity : AppCompatActivity() {
                     userDataMap["name"] = name
 
                     database.child("Users").child(phoneNumber).updateChildren(userDataMap as Map<String, Any>)
-                        .addOnCompleteListener(object: OnCompleteListener<Void>{
-                            override fun onComplete(task: Task<Void>) {
-                                if (task.isSuccessful){
-                                    Toast.makeText(applicationContext,"Congratulations Your account has been Created",Toast.LENGTH_SHORT).show()
-                                    loadingProgressBar.dismiss()
-                                    startActivity(Intent(applicationContext,RegisterActivity::class.java))
-                                }
-                                else{
-                                    loadingProgressBar.dismiss()
-                                    Toast.makeText(applicationContext,"Network Error: Please Try Again",Toast.LENGTH_SHORT).show()
-                                }
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(
+                                    context,
+                                    "Congratulations Your account has been Created",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                loadingProgressBar.dismiss()
+                                startActivity(Intent(context, RegisterActivity::class.java))
+                            } else {
+                                loadingProgressBar.dismiss()
+                                Toast.makeText(
+                                    context,
+                                    "Network Error: Please Try Again",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                        })
+                        }
 
                 }
                 else{
-                    Toast.makeText(applicationContext,"This "+phoneNumber+"is already Registered",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,"This "+phoneNumber+"is already Registered",Toast.LENGTH_SHORT).show()
                     loadingProgressBar.dismiss()
-                    Toast.makeText(applicationContext,"Please Try Using Another Phone",Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(applicationContext,MainActivity::class.java))
+                    Toast.makeText(context,"Please Try Using Another Phone",Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(context,MainActivity::class.java))
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(applicationContext,"DataBase error",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"DataBase error",Toast.LENGTH_SHORT).show()
             }
         })
     }

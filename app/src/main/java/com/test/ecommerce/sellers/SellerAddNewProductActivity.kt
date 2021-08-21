@@ -1,4 +1,4 @@
-package com.test.ecommerce.admin
+package com.test.ecommerce.sellers
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
@@ -9,18 +9,22 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.gms.tasks.OnFailureListener
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
-import com.test.ecommerce.databinding.ActivityAdminAddNewProductBinding
+import com.test.ecommerce.databinding.ActivitySellerAddNewProductBinding
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-class AdminAddNewProductActivity : AppCompatActivity() {
-    lateinit var binding: ActivityAdminAddNewProductBinding
+class SellerAddNewProductActivity : AppCompatActivity() {
+    lateinit var binding: ActivitySellerAddNewProductBinding
     private lateinit var categoryName: String
     private lateinit var description: String
     private lateinit var price: String
@@ -31,16 +35,23 @@ class AdminAddNewProductActivity : AppCompatActivity() {
     private lateinit var downloadUri: String
     private lateinit var productImageRef: StorageReference
     private lateinit var productRef:DatabaseReference
+    private lateinit var sellersRef:DatabaseReference
     private lateinit var loadingProgressDialog: ProgressDialog
     private var imageUri: Uri?=null
-    lateinit var getAction:ActivityResultLauncher<String>
+    private lateinit var getAction:ActivityResultLauncher<String>
+    private lateinit var sName: String
+    private lateinit var sAddress: String
+    private lateinit var sPhone: String
+    private lateinit var sEmail: String
+    private lateinit var sID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= ActivityAdminAddNewProductBinding.inflate(layoutInflater)
+        binding= ActivitySellerAddNewProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
         productImageRef=Firebase.storage.reference.child("Product Images")
         productRef=Firebase.database.reference.child("Products")
+        sellersRef=Firebase.database.reference.child("Sellers")
         loadingProgressDialog= ProgressDialog(this)
 
         categoryName= intent.getStringExtra("category").toString()
@@ -52,13 +63,28 @@ class AdminAddNewProductActivity : AppCompatActivity() {
             imageUri=uri
         }
 
-        Toast.makeText(this,categoryName,Toast.LENGTH_SHORT).show()
+        sellersRef.child(Firebase.auth.currentUser!!.uid)
+            .addValueEventListener(object: ValueEventListener{
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()){
+                        sName=snapshot.child("name").value.toString()
+                        sAddress=snapshot.child("address").value.toString()
+                        sPhone=snapshot.child("phone").value.toString()
+                        sEmail=snapshot.child("email").value.toString()
+                        sID=snapshot.child("uid").value.toString()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
     }
 
     private fun validateProductData() {
-        description=binding.productDescription.text.toString()
-        price=binding.productPrice.text.toString()
-        pname=binding.productName.text.toString()
+        description=binding.productSellerDescription.text.toString()
+        price=binding.productSellerPrice.text.toString()
+        pname=binding.productSellerName.text.toString()
 
         if (imageUri==null){Toast.makeText(this,"Product Image Is Mandatory...",Toast.LENGTH_SHORT).show()}
         else if (TextUtils.isEmpty(description)){Toast.makeText(this,"Description Is Mandatory...",Toast.LENGTH_SHORT).show()}
@@ -77,7 +103,7 @@ class AdminAddNewProductActivity : AppCompatActivity() {
 
         loadingProgressDialog.apply {
             setTitle("Add New Product")
-            setMessage("Please Wait, While We Are Adding The Product")
+            setMessage("Dear Seller, Please Wait While We Are Adding The Product")
             setCanceledOnTouchOutside(false)
             show()
         }
@@ -120,11 +146,17 @@ class AdminAddNewProductActivity : AppCompatActivity() {
         productMap["price"] = price
         productMap["pname"] = pname
         productMap["category"] = categoryName
+        productMap["productState"]="Not Approved"
+        productMap["sellerName"]=sName
+        productMap["sellerAddress"]=sAddress
+        productMap["sellerPhone"]=sPhone
+        productMap["sellerEmail"]=sEmail
+        productMap["sid"]=sID
 
         productRef.child(productRandomKey).updateChildren(productMap)
             .addOnCompleteListener {
                 if (it.isSuccessful){
-                    startActivity(Intent(this, AdminCategoryActivity::class.java))
+                    startActivity(Intent(this, SellerHomeActivity::class.java))
                     loadingProgressDialog.dismiss()
                     Toast.makeText(this,"Product added successfully",Toast.LENGTH_SHORT).show()
                 }

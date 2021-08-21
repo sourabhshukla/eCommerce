@@ -57,18 +57,18 @@ class AdminNewOrdersActivity : AppCompatActivity() {
                 holder.binding.orderDateTime.text="Order at: ${model.date}, ${model.time}"
                 holder.binding.orderTotalPrice.text="Total Amount: $ ${model.totalPrice}"
                 holder.binding.showAllProductsBtn.setOnClickListener {
-                    startActivity(Intent(applicationContext, AdminUserProductsActivity::class.java).putExtra("uid",uID))
+                    startActivity(Intent(it.context, AdminUserProductsActivity::class.java).putExtra("uid",uID))
                 }
                 holder.itemView.setOnClickListener {
                     val options= arrayOf<CharSequence>(
                         "Yes",
                         "No"
                     )
-                    val builder=AlertDialog.Builder(applicationContext)
+                    val builder=AlertDialog.Builder(it.context)
                     builder.apply {
                         setTitle("Have You Shipped This Order!")
                         setItems(options
-                        ) { dialog, which ->
+                        ) { _, which ->
                             if (which==0){
                                 val uID=getRef(position).key
                                 removeOrder(uID)

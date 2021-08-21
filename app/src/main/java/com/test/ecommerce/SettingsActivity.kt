@@ -57,7 +57,7 @@ class SettingsActivity : AppCompatActivity() {
          closeTextBtn = binding.closeSettingsBtn
          saveTextButton =  binding.updateAccountSettingsBtn
 
-        userInfoDisplay(profileImageView, fullNameEditText, userPhoneEditText, addressEditText)
+        userInfoDisplay(this,profileImageView, fullNameEditText, userPhoneEditText, addressEditText)
 
         closeTextBtn.setOnClickListener { finish() }
 
@@ -174,7 +174,7 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun userInfoDisplay(profileImageView: CircleImageView, fullNameEditText: EditText, userPhoneEditText: EditText, addressEditText: EditText) {
+    private fun userInfoDisplay(context: Context,profileImageView: CircleImageView, fullNameEditText: EditText, userPhoneEditText: EditText, addressEditText: EditText) {
         val usersRef=Firebase.database.reference.child("Users").child(currentOnlineUser!!.phone!!)
 
         usersRef.addValueEventListener(object :ValueEventListener{
@@ -196,7 +196,7 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(applicationContext,"ERROR: ${error}",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"ERROR: $error",Toast.LENGTH_SHORT).show()
             }
         })
     }

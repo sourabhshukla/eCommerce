@@ -89,7 +89,7 @@ class HomeActivity : AppCompatActivity() {
         super.onStart()
 
         val options=FirebaseRecyclerOptions.Builder<Products>()
-            .setQuery(productRef,Products::class.java)
+            .setQuery(productRef.orderByChild("productState").equalTo("Approved"),Products::class.java)
             .build()
 
         val adapter= object: FirebaseRecyclerAdapter<Products,ProductViewHolder>(options){
@@ -103,17 +103,16 @@ class HomeActivity : AppCompatActivity() {
                 position: Int,
                 model: Products
             ) {
-                holder.binding
                 holder.binding.productName.text=model.pname
                 holder.binding.productDescription.text=model.description
                 holder.binding.productPrice.text=model.price
                 Picasso.get().load(model.image).into(holder.binding.productImage)
                 holder.itemView.setOnClickListener {
                     if(type=="Admin"){
-                        startActivity(Intent(applicationContext, AdminMaintainProductsActivity::class.java).putExtra("pid",model.pid))
+                        startActivity(Intent(it.context, AdminMaintainProductsActivity::class.java).putExtra("pid",model.pid))
                     }
                     else{
-                        startActivity(Intent(applicationContext,ProductDetailActivity::class.java).putExtra("pid",model.pid))
+                        startActivity(Intent(it.context,ProductDetailActivity::class.java).putExtra("pid",model.pid))
                     }
                 }
             }

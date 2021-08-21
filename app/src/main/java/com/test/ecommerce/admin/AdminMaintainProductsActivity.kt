@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso
 import com.test.ecommerce.R
 import com.test.ecommerce.databinding.ActivityAdminMaintainProductsBinding
 import com.test.ecommerce.prevalent.currentOnlineUser
+import com.test.ecommerce.sellers.SellerProductCategoryActivity
 
 class AdminMaintainProductsActivity : AppCompatActivity() {
     private lateinit var binding:ActivityAdminMaintainProductsBinding
@@ -26,7 +27,7 @@ class AdminMaintainProductsActivity : AppCompatActivity() {
         setContentView(binding.root)
         productId=intent.getStringExtra("pid").toString()
         productsRef=Firebase.database.reference.child("Products").child(productId)
-        Picasso.get().load(currentOnlineUser!!.image).placeholder(R.drawable.profile).into(binding.productImage)
+        Picasso.get().load(currentOnlineUser!!.image).placeholder(R.drawable.profile).into(binding.productSellerImage)
 
         displaySpecificProductInfo()
 
@@ -36,33 +37,33 @@ class AdminMaintainProductsActivity : AppCompatActivity() {
 
     private fun deleteThisProduct() {
         productsRef.removeValue().addOnCompleteListener {
-            startActivity(Intent(this, AdminCategoryActivity::class.java))
+            startActivity(Intent(this, SellerProductCategoryActivity::class.java))
             finish()
             Toast.makeText(this,"Product Removed Successfully",Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun applyChanges() {
-        if (TextUtils.isEmpty(binding.productName.toString())){
+        if (TextUtils.isEmpty(binding.productSellerName.toString())){
             Toast.makeText(this,"Name cant be empty",Toast.LENGTH_SHORT).show()
         }
-        else if (TextUtils.isEmpty(binding.productDescription.toString())){
+        else if (TextUtils.isEmpty(binding.productSellerDescription.toString())){
             Toast.makeText(this,"Description cant be empty",Toast.LENGTH_SHORT).show()
         }
-        else if (TextUtils.isEmpty(binding.productPrice.toString())){
+        else if (TextUtils.isEmpty(binding.productSellerPrice.toString())){
             Toast.makeText(this,"Price cant be empty",Toast.LENGTH_SHORT).show()
         }
         else{
             val productMap:HashMap<String,Any> =HashMap<String,Any>()
             productMap["pid"] = productId
-            productMap["description"] = binding.productDescription.text.toString()
-            productMap["price"] = binding.productPrice.text.toString()
-            productMap["pname"] = binding.productName.text.toString()
+            productMap["description"] = binding.productSellerDescription.text.toString()
+            productMap["price"] = binding.productSellerPrice.text.toString()
+            productMap["pname"] = binding.productSellerName.text.toString()
             productsRef.updateChildren(productMap)
                 .addOnCompleteListener {
                     if (it.isSuccessful){
                         Toast.makeText(this,"Changes Applied Successfully",Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, AdminCategoryActivity::class.java))
+                        startActivity(Intent(this, SellerProductCategoryActivity::class.java))
                         finish()
                     }
                 }
@@ -73,10 +74,10 @@ class AdminMaintainProductsActivity : AppCompatActivity() {
         productsRef.addValueEventListener(object :ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()){
-                    binding.productName.setText(snapshot.child("pname").value.toString())
-                    binding.productDescription.setText(snapshot.child("description").value.toString())
-                    binding.productPrice.setText(snapshot.child("price").value.toString())
-                    Picasso.get().load(snapshot.child("image").value.toString()).placeholder(R.drawable.profile).into(binding.productImage)
+                    binding.productSellerName.setText(snapshot.child("pname").value.toString())
+                    binding.productSellerDescription.setText(snapshot.child("description").value.toString())
+                    binding.productSellerPrice.setText(snapshot.child("price").value.toString())
+                    Picasso.get().load(snapshot.child("image").value.toString()).placeholder(R.drawable.profile).into(binding.productSellerImage)
                 }
             }
 
